@@ -11,6 +11,11 @@ class Api < Sinatra::Base
     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
   end
 
+  get '/invitations' do
+    content_type :json
+    { invitations: Invitation.index }.to_json
+  end
+
   post '/invitations' do
     content_type :json
     if uuid = Invitation.create(params['email_address'])
