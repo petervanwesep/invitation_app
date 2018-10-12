@@ -7,6 +7,10 @@ require_relative './config'
 class Api < Sinatra::Base
   use InvitationApp::Middleware::JwtAuth
 
+  before do
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+  end
+
   post '/invitations' do
     content_type :json
     if uuid = Invitation.create(params['email_address'])
@@ -26,5 +30,11 @@ class Api < Sinatra::Base
       status 404
       { message: 'not found' }.to_json
     end
+  end
+
+  options '*' do
+    response.headers["Allow"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token"
+    200
   end
 end

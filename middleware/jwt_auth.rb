@@ -8,6 +8,8 @@ module InvitationApp
       end
 
       def call(env)
+        return @app.call(env) if env.fetch('REQUEST_METHOD') == 'OPTIONS'
+
         begin
           bearer = env.fetch('HTTP_AUTHORIZATION', '').slice(7..-1) # REMOVE "BEARER "
           payload, header = InvitationApp::Jwt.decode(bearer)
